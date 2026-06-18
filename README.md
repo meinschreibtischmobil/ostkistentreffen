@@ -31,4 +31,4 @@ Eine mobile Web-App für 2-Takt-Mischöl-Berechnung – optimiert für Simson, M
 
 ---
 
-*Design inspiriert von [thomas-ifa-garage.de](https://thomas-ifa-garage.de)*
+*Design inspiriert von Mario Vogel
