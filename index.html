@@ -562,7 +562,7 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + groqKey() },
           body: JSON.stringify({
-            model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+            model: 'qwen/qwen3.6-27b',
             max_tokens: 100,
             messages: [{
               role: 'user',
@@ -574,14 +574,19 @@
           })
         });
         const data = await resp.json();
+        document.getElementById('aiSpinner').style.display = 'none';
+        document.getElementById('aiEditBtn').style.display = 'block';
+        if (data.error) {
+          document.getElementById('aiPillLabel').textContent = 'API-Fehler';
+          document.getElementById('aiPillVal').textContent = data.error.message || 'Unbekannter Fehler';
+          return;
+        }
         let raw = (data.choices?.[0]?.message?.content || '').trim();
         // Komma zu Punkt normalisieren
         raw = raw.replace(',', '.');
         // Nur Ziffern und Punkt behalten falls KI Einheit mitgeliefert hat
         const numMatch = raw.match(/\d+[.,]?\d*/);
         const cleanNum = numMatch ? numMatch[0].replace(',', '.') : '';
-        document.getElementById('aiSpinner').style.display = 'none';
-        document.getElementById('aiEditBtn').style.display = 'block';
         if (raw.toLowerCase().includes('unbekannt') || !cleanNum || isNaN(parseFloat(cleanNum))) {
           document.getElementById('aiPillLabel').textContent = 'Nicht erkennbar';
           document.getElementById('aiPillVal').textContent = 'Bitte manuell eingeben';
@@ -767,7 +772,7 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + groqKey() },
           body: JSON.stringify({
-            model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+            model: 'qwen/qwen3.6-27b',
             max_tokens: 100,
             messages: [{
               role: 'user',
@@ -779,9 +784,14 @@
           })
         });
         const data = await resp.json();
-        const raw = (data.choices?.[0]?.message?.content || '').trim().replace(/[^0-9]/g, '');
         document.getElementById('odoSpinner').style.display = 'none';
         document.getElementById('odoEditBtn').style.display = 'block';
+        if (data.error) {
+          document.getElementById('odoPillLabel').textContent = 'API-Fehler';
+          document.getElementById('odoPillVal').textContent = data.error.message || 'Unbekannter Fehler';
+          return;
+        }
+        const raw = (data.choices?.[0]?.message?.content || '').trim().replace(/[^0-9]/g, '');
         if (!raw || isNaN(parseInt(raw))) {
           document.getElementById('odoPillLabel').textContent = 'Nicht erkennbar – manuell eingeben';
           document.getElementById('odoPillVal').textContent = '';
