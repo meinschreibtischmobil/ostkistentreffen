@@ -589,7 +589,7 @@
         const cleanNum = numMatch ? numMatch[0].replace(',', '.') : '';
         if (raw.toLowerCase().includes('unbekannt') || !cleanNum || isNaN(parseFloat(cleanNum))) {
           document.getElementById('aiPillLabel').textContent = 'Nicht erkennbar';
-          document.getElementById('aiPillVal').textContent = 'Bitte manuell eingeben';
+          document.getElementById('aiPillVal').textContent = raw ? ('KI sagte: "' + raw.slice(0, 60) + '"') : 'Keine Antwort erhalten';
         } else {
           const liters = parseFloat(cleanNum);
           document.getElementById('aiPillLabel').textContent = 'Erkannte Literzahl';
@@ -791,10 +791,11 @@
           document.getElementById('odoPillVal').textContent = data.error.message || 'Unbekannter Fehler';
           return;
         }
-        const raw = (data.choices?.[0]?.message?.content || '').trim().replace(/[^0-9]/g, '');
+        const rawText = (data.choices?.[0]?.message?.content || '').trim();
+        const raw = rawText.replace(/[^0-9]/g, '');
         if (!raw || isNaN(parseInt(raw))) {
-          document.getElementById('odoPillLabel').textContent = 'Nicht erkennbar – manuell eingeben';
-          document.getElementById('odoPillVal').textContent = '';
+          document.getElementById('odoPillLabel').textContent = 'Nicht erkennbar';
+          document.getElementById('odoPillVal').textContent = rawText ? ('KI sagte: "' + rawText.slice(0, 60) + '"') : 'Keine Antwort erhalten';
         } else {
           const km = parseInt(raw);
           document.getElementById('odoPillLabel').textContent = 'Erkannter Kilometerstand';
